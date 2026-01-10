@@ -5,7 +5,6 @@ import com.gogos.spring_project.exceptions.ResourceNotFoundException;
 import com.gogos.spring_project.payloads.UserDto;
 import com.gogos.spring_project.repositories.UserRepo;
 import com.gogos.spring_project.service.UserService;
-import org.hibernate.annotations.Collate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +37,8 @@ public class UserServiceImpl implements UserService {
         user.setAbout(userDto.getAbout());
 
         User updateUser=this.userRepo.save(user);
-        UserDto userDto1=this.userToUserdto(updateUser);
 
-        return userDto1;
+        return this.userToUserdto(updateUser);
     }
 
     @Override
@@ -58,8 +56,7 @@ public class UserServiceImpl implements UserService {
 
         List<User> users=this.userRepo.findAll();
 
-        List<UserDto> userDtos=users.stream().map(user-> this.userToUserdto(user)).collect(Collectors.toList());
-        return userDtos;
+        return users.stream().map(user-> this.userToUserdto(user)).collect(Collectors.toList());
     }
 
     @Override
@@ -67,14 +64,13 @@ public class UserServiceImpl implements UserService {
 
         User user=this.userRepo.findById(userId)
                 .orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
-
+//        System.out.println( userRepo.findByName("gogo"));
         this.userRepo.delete(user);
     }
 
     public User dtoToUser(UserDto userdto){
 
         User user = new User();
-        user.setId(userdto.getId());
         user.setName(userdto.getName());
         user.setEmail(userdto.getEmail());
         user.setPassword(userdto.getPassword());
