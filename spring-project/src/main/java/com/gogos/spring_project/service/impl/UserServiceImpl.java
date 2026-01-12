@@ -59,14 +59,14 @@ public class UserServiceImpl implements UserService {
         return users.stream().map(user-> this.userToUserdto(user)).collect(Collectors.toList());
     }
 
-    @Override
-    public void deleteUser(Integer userId) {
+        @Override
+        public void deleteUser(Integer userId) {
 
-        User user=this.userRepo.findById(userId)
-                .orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
-//        System.out.println( userRepo.findByName("gogo"));
-        this.userRepo.delete(user);
-    }
+            User user=this.userRepo.findById(userId)
+                    .orElseThrow(()-> new ResourceNotFoundException("User","Id",userId));
+    //        System.out.println( userRepo.findByName("gogo"));
+                userRepo.delete(user);
+        }
 
     public User dtoToUser(UserDto userdto){
 
