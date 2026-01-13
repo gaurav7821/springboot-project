@@ -5,6 +5,7 @@ import com.gogos.spring_project.exceptions.ResourceNotFoundException;
 import com.gogos.spring_project.payloads.UserDto;
 import com.gogos.spring_project.repositories.UserRepo;
 import com.gogos.spring_project.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
 
     @Override
     public UserDto createUser(UserDto userdto) {
@@ -70,22 +75,24 @@ public class UserServiceImpl implements UserService {
 
     public User dtoToUser(UserDto userdto){
 
-        User user = new User();
-        user.setName(userdto.getName());
-        user.setEmail(userdto.getEmail());
-        user.setPassword(userdto.getPassword());
-        user.setAbout(userdto.getAbout());
-        return user;
+//        User user = this.modelMapper.map(userdto, User.class);
+
+//        user.setName(userdto.getName());
+//        user.setEmail(userdto.getEmail());
+//        user.setPassword(userdto.getPassword());
+//        user.setAbout(userdto.getAbout());
+        return this.modelMapper.map(userdto, User.class);
     }
 
     public UserDto userToUserdto(User user){
 
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setAbout(user.getAbout());
-        return userDto;
+//        UserDto userDto = new UserDto();
+
+//        userDto.setId(user.getId());
+//        userDto.setName(user.getName());
+//        userDto.setEmail(user.getEmail());
+//        userDto.setPassword(user.getPassword());
+//        userDto.setAbout(user.getAbout());
+        return modelMapper.map(user, UserDto.class);
     }
 }
