@@ -15,11 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepo userRepo;
-
-    @Autowired
     private ModelMapper modelMapper;
+
+    public UserServiceImpl(UserRepo userRepo, ModelMapper modelMapper){
+        this.userRepo=userRepo;
+        this.modelMapper=modelMapper;
+    }
 
 
     @Override
