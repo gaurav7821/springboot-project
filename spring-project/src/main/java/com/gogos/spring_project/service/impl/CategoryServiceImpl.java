@@ -6,10 +6,12 @@ import com.gogos.spring_project.payloads.CategoryDto;
 import com.gogos.spring_project.repositories.CategoryRepo;
 import com.gogos.spring_project.service.CategoryService;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     private CategoryRepo categoryRepo;
@@ -35,6 +37,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category cat = categoryRepo.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", categoryId));
+
+        cat.setCategoryTitle(categoryDto.getCategoryTitle());
+        cat.setCategoryDescription(categoryDto.getCategoryDescription());
 
         Category updatedCat = categoryRepo.save(cat);
 
