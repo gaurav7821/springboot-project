@@ -3,6 +3,7 @@ package com.gogos.spring_project.controller;
 import com.gogos.spring_project.payloads.ApiResponse;
 import com.gogos.spring_project.payloads.CategoryDto;
 import com.gogos.spring_project.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ public class CategoryController {
 
     //create
     @PostMapping("/")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
         CategoryDto createCategory = categoryService.createCategory(categoryDto);
         return new ResponseEntity<CategoryDto>(createCategory, HttpStatus.CREATED);
     }
 
     //update
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId){
+    public ResponseEntity<CategoryDto> updateCategory(@Valid  @RequestBody CategoryDto categoryDto, @PathVariable Integer categoryId){
         CategoryDto updateCategory = categoryService.updateCategory(categoryDto, categoryId);
         return new ResponseEntity<CategoryDto>(updateCategory, HttpStatus.OK);
     }
