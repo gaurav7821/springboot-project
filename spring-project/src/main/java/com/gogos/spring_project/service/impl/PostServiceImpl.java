@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -62,7 +63,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPost() {
+    public List<PostDto> getAllPost() {
         return List.of();
     }
 
@@ -72,17 +73,33 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPostsByCategory(Integer categoryId) {
-        return List.of();
+    public List<PostDto> getPostsByCategory(Integer categoryId) {
+
+        Category cat = categoryRepo.findById(categoryId)
+                .orElseThrow(()-> new ResourceNotFoundException("Category", "Category Id", categoryId));
+
+        List<Post> posts = postRepo.findByCategory(cat);
+
+        return posts.stream().map((post)-> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Post> getPostsByUser(Integer userId) {
-        return List.of();
+    public List<PostDto> getPostsByUser(Integer userId) {
+
+        User user = userRepo.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("User", "User Id", userId));
+
+        List<Post> posts = postRepo.findByUser(user);
+
+        return posts
+                .stream()
+                .map((post)-> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Post> searchPosts(String keyword) {
+    public List<PostDto> searchPosts(String keyword) {
         return List.of();
     }
 }
