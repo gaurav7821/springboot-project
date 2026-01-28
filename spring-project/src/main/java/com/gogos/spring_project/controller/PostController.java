@@ -1,6 +1,7 @@
 package com.gogos.spring_project.controller;
 
 import com.gogos.spring_project.entities.Post;
+import com.gogos.spring_project.payloads.ApiResponse;
 import com.gogos.spring_project.payloads.PostDto;
 import com.gogos.spring_project.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,5 +74,27 @@ public class PostController {
 
         return new ResponseEntity<PostDto>(post, HttpStatus.OK);
 
+    }
+
+    //Delete post
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<ApiResponse> deletePost(@PathVariable Integer postId){
+
+        postService.deletePost(postId);
+
+        return new ResponseEntity<ApiResponse>(new ApiResponse("Post is deleted successful", true),HttpStatus.OK);
+
+    }
+
+    //Update post
+
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto,
+                                              @PathVariable Integer postId){
+
+        PostDto updatePost = postService.updatePost(postDto,postId);
+
+        return new ResponseEntity<PostDto>(updatePost, HttpStatus.OK);
     }
 }
