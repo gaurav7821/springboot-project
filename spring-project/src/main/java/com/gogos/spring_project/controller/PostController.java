@@ -1,5 +1,6 @@
 package com.gogos.spring_project.controller;
 
+import com.gogos.spring_project.entities.Post;
 import com.gogos.spring_project.payloads.PostDto;
 import com.gogos.spring_project.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,28 @@ public class PostController {
         List<PostDto> posts = postService.getPostsByCategory(categoryId);
 
         return new ResponseEntity<List<PostDto>>(posts,HttpStatus.OK);
+
+    }
+
+    //Get all post
+
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostDto>> getAllPost(){
+
+        List<PostDto> allPost = postService.getAllPost();
+
+        return new ResponseEntity<List<PostDto>>(allPost, HttpStatus.OK);
+
+    }
+
+    //Get post by Id
+
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<PostDto> getPostById(@PathVariable Integer postId){
+
+        PostDto post = postService.getPostById(postId);
+
+        return new ResponseEntity<PostDto>(post, HttpStatus.OK);
 
     }
 }
