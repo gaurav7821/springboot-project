@@ -11,6 +11,9 @@ import com.gogos.spring_project.repositories.UserRepo;
 import com.gogos.spring_project.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -77,9 +80,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost() {
+    public List<PostDto> getAllPost(Integer pageNumber, Integer pageSize) {
 
-        List<Post> allPosts = postRepo.findAll();
+        Pageable p = PageRequest.of(pageNumber, pageSize);
+
+        Page<Post> pagePosts = postRepo.findAll(p);
+
+        List<Post> allPosts = pagePosts.getContent();
 
         return allPosts
                 .stream()
