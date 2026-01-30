@@ -5,10 +5,12 @@ import com.gogos.spring_project.entities.Post;
 import com.gogos.spring_project.entities.User;
 import com.gogos.spring_project.exceptions.ResourceNotFoundException;
 import com.gogos.spring_project.payloads.PostDto;
+import com.gogos.spring_project.payloads.PostResponse;
 import com.gogos.spring_project.repositories.CategoryRepo;
 import com.gogos.spring_project.repositories.PostRepo;
 import com.gogos.spring_project.repositories.UserRepo;
 import com.gogos.spring_project.service.PostService;
+import org.hibernate.validator.internal.constraintvalidators.bv.number.sign.PositiveOrZeroValidatorForShort;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -80,7 +82,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPost(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
 
         Pageable p = PageRequest.of(pageNumber, pageSize);
 
@@ -88,10 +90,21 @@ public class PostServiceImpl implements PostService {
 
         List<Post> allPosts = pagePosts.getContent();
 
-        return allPosts
+        List<PostDto> postDtos = allPosts
                 .stream()
                 .map((post)-> modelMapper.map(post, PostDto.class))
                 .collect(Collectors.toList());
+
+        PostResponse postResponse = new PostResponse();
+
+        postResponse.setContent(postDtos);
+        postResponse.setPageNumber(pagePosts.getNumber());
+        postResponse.setPageSize(pagePosts.getSize());
+        postResponse.setTotalElement(pagePosts.getTotalElements());
+        postResponse.setTotalPages(pagePosts.getTotalPages());
+        postResponse.setLastPage(pagePosts.isLast());
+
+        return postResponse;
 
     }
 
