@@ -10,7 +10,6 @@ import com.gogos.spring_project.repositories.CategoryRepo;
 import com.gogos.spring_project.repositories.PostRepo;
 import com.gogos.spring_project.repositories.UserRepo;
 import com.gogos.spring_project.service.PostService;
-import org.hibernate.validator.internal.constraintvalidators.bv.number.sign.PositiveOrZeroValidatorForShort;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -82,7 +81,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy) {
 
         Pageable p = PageRequest.of(pageNumber, pageSize);
 

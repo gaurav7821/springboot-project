@@ -1,6 +1,6 @@
 package com.gogos.spring_project.service;
 
-import com.gogos.spring_project.entities.Post;
+
 import com.gogos.spring_project.payloads.PostDto;
 import com.gogos.spring_project.payloads.PostResponse;
 
@@ -22,7 +22,7 @@ public interface PostService {
 
     //Get all post
 
-    PostResponse getAllPost(Integer pageNumber, Integer pageSize);
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy);
 
     //Get single post
 
