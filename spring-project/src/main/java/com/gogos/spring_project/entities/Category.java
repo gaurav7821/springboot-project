@@ -9,27 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="users")
+@Table(name = "category")
 @NoArgsConstructor
 @Getter
 @Setter
-public class User {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer categoryId;
 
-    @Column(name="user_name", nullable = false, length = 100)
-    private String name;
+    @Column(name = "title", length = 100, nullable = false)
+    private String categoryTitle;
 
-    private String email;
+    @Column(name = "description")
+    private String categoryDescription;
 
-    private String password;
-
-    private String about;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Post> posts = new ArrayList<>();
-
-
 }
