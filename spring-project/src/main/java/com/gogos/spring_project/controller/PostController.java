@@ -1,5 +1,6 @@
 package com.gogos.spring_project.controller;
 
+import com.gogos.spring_project.config.AppConstants;
 import com.gogos.spring_project.entities.Post;
 import com.gogos.spring_project.payloads.ApiResponse;
 import com.gogos.spring_project.payloads.PostDto;
@@ -59,12 +60,13 @@ public class PostController {
 
     @GetMapping("/posts")
     public ResponseEntity<PostResponse> getAllPost(
-            @RequestParam(value = "pageNumber", defaultValue = "0",required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
-            @RequestParam(value = "sortBy", defaultValue ="postId", required = false) String sortBy
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER,required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
             ){
 
-        PostResponse postResponse = postService.getAllPost(pageNumber, pageSize, sortBy);
+        PostResponse postResponse = postService.getAllPost(pageNumber, pageSize, sortBy, sortDir);
 
         return new ResponseEntity<PostResponse>(postResponse, HttpStatus.OK);
 
@@ -101,5 +103,16 @@ public class PostController {
         PostDto updatePost = postService.updatePost(postDto,postId);
 
         return new ResponseEntity<PostDto>(updatePost, HttpStatus.OK);
+    }
+
+    //search
+
+    @GetMapping("/posts/search/{keywords}")
+    public ResponseEntity<List<PostDto>> searchPostByTitle(@PathVariable("keywords") String keywords){
+
+        List<PostDto> postDtos = postService.searchPosts(keywords);
+
+        return new ResponseEntity<List<PostDto>>(postDtos, HttpStatus.OK);
+
     }
 }

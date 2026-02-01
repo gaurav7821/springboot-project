@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,6 +37,8 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private CategoryRepo categoryRepo;
 
+    //create post
+
     @Override
     public PostDto createPost(PostDto postDto, Integer userId, Integer categoryId) {
 
@@ -56,6 +59,8 @@ public class PostServiceImpl implements PostService {
         return modelMapper.map(newPost, PostDto.class);
     }
 
+    //Update post
+
     @Override
     public PostDto updatePost(PostDto postDto, Integer postId) {
 
@@ -70,6 +75,8 @@ public class PostServiceImpl implements PostService {
         return modelMapper.map(updatedPost, PostDto.class);
     }
 
+    //Delete post
+
     @Override
     public void deletePost(Integer postId) {
 
@@ -80,10 +87,17 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy) {
+    //Get all post
 
-        Pageable p = PageRequest.of(pageNumber, pageSize);
+    @Override
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+
+        Sort sort= (sortDir.equalsIgnoreCase("asc")?
+                Sort.by(sortBy).ascending():
+                Sort.by(sortBy).descending());
+
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort);
 
         Page<Post> pagePosts = postRepo.findAll(p);
 
@@ -107,6 +121,8 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    //Get Post By PostId
+
     @Override
     public PostDto getPostById(Integer postId) {
 
@@ -116,6 +132,8 @@ public class PostServiceImpl implements PostService {
         return modelMapper.map(post, PostDto.class);
 
     }
+
+    //Get post by category
 
     @Override
     public List<PostDto> getPostsByCategory(Integer categoryId) {
@@ -128,6 +146,8 @@ public class PostServiceImpl implements PostService {
         return posts.stream().map((post)-> modelMapper.map(post, PostDto.class))
                 .collect(Collectors.toList());
     }
+
+    //Get post by user
 
     @Override
     public List<PostDto> getPostsByUser(Integer userId) {
@@ -143,8 +163,17 @@ public class PostServiceImpl implements PostService {
                 .collect(Collectors.toList());
     }
 
+    //Searching post
+
     @Override
     public List<PostDto> searchPosts(String keyword) {
-        return List.of();
+
+        List<Post> posts = postRepo.findByTitleContaining(keyword);
+        List<PostDto> postDtos = posts
+                .stream()
+                .map((post)-> modelMapper.map(post, PostDto.class))
+                .collect(Collectors.toList());
+
+        return postDtos;
     }
 }
